@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHARK-CONTROL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        .iframe-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 99%;
+            border: none;
+            display: block;
+        }
+
+        /* Indicador de carregamento */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        /* Esconde o indicador quando o iframe carrega */
+        iframe.loaded + .loading {
+            display: none;
+        }
+
+        /* Efeito de transição suave */
+        iframe {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        iframe.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="iframe-container">
+        <iframe 
+            src="https://shark-control.lovable.app/" 
+            allow="microphone"
+            onload="this.classList.add('loaded')"
+            allowfullscreen
+        ></iframe>
+        <div class="loading">
+            Carregando...
+        </div>
+    </div>
+
+    <script>
+        // Script para melhor experiência
+        document.addEventListener('DOMContentLoaded', function() {
+            // Foco no iframe para melhor interação
+            const iframe = document.querySelector('iframe');
+            
+            // Adiciona event listener para tratar erros
+            iframe.addEventListener('error', function() {
+                const loading = document.querySelector('.loading');
+                loading.textContent = 'Erro ao carregar site, tente novamente.';
+                loading.style.color = '#ff6b6b';
+            });
+            
+            // Força o iframe a ocupar toda a área disponível
+            function resizeIframe() {
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+            }
+            
+            // Redimensiona quando a janela muda de tamanho
+            window.addEventListener('resize', resizeIframe);
+            resizeIframe();
+            
+            // Foco automático no iframe
+            setTimeout(() => {
+                iframe.focus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
